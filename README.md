@@ -1,6 +1,6 @@
 # lazypaca plugins
 
-<img src="./assets/banner.png" alt="Too lazy to go out, but still ready to hunt for the perfect food spot" width="420">
+<img src="./assets/banner.jpg" alt="Too lazy to go out, but still ready to hunt for the perfect food spot" width="420">
 
 한국 음식점 검색 MCP 를 에이전트에 한 번에 붙이는 플러그인. Claude Code · Codex 두 형식으로
 배포한다.
