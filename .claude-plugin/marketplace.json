@@ -1,0 +1,15 @@
+{
+  "name": "lazypaca",
+  "owner": {
+    "name": "Ongleam",
+    "url": "https://github.com/ongleam"
+  },
+  "description": "lazypaca — 한국 음식점 검색 MCP 를 Claude Code 에 붙이는 플러그인",
+  "plugins": [
+    {
+      "name": "lazypaca",
+      "description": "한국 음식점 검색 MCP (공개 read-only). search_places · get_places · render_place_map",
+      "source": "./plugins/lazypaca"
+    }
+  ]
+}

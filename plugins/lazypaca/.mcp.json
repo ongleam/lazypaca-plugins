@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "lazypaca": {
+      "type": "http",
+      "url": "https://api.lazypaca.com/mcp"
+    }
+  }
+}
