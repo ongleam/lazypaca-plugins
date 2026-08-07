@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 프로젝트
 
-**플러그인 하나(`lazypaca`)를 두 플랫폼 형식으로 배포하는 마켓플레이스 레포**다. 코드는
-없고 매니페스트가 전부다 — 사용자가 마켓플레이스 하나만 추가하면 lazypaca MCP 가 자동
-등록된다.
+**플러그인 하나(`lazypaca`)를 두 플랫폼 형식으로 배포하는 마켓플레이스 레포**다. 서버
+코드는 없고 매니페스트·스킬·브랜드 자산이 전부다 — 사용자가 마켓플레이스 하나만 추가하면
+lazypaca MCP와 사용 스킬이 자동 등록된다.
 
 서버 구현은 여기 없다. 별도 레포(`ongleam/lazypaca`)의 `apps/api` 가
 `https://api.lazypaca.com/mcp` 로 서비스하고, 이 레포는 **그 URL 을 가리키는 포인터**다.
@@ -20,6 +20,7 @@ plugins/lazypaca/
   .claude-plugin/plugin.json        Claude 매니페스트
   .codex-plugin/plugin.json         Codex 매니페스트 (interface 블록 필수적으로 유용)
   .mcp.json                         ★ 두 플랫폼이 공유하는 유일한 실체
+  skills/lazypaca/                  검색·예약 워크플로와 UI 메타데이터·브랜드 자산
 ```
 
 **플러그인 본문은 하나고 매니페스트만 두 벌이다.** 두 플랫폼이 서로의 디렉토리를 무시하기
@@ -91,10 +92,9 @@ curl -s -o /dev/null -w '%{http_code}\n' -X POST https://api.lazypaca.com/mcp \
    두 플랫폼 다 플러그인 훅을 지원하지만(`hooks/hooks.json`) 이 레포는 갖지 않는다.
    요구가 오면 스킬(모델이 읽고 판단하는 텍스트)로 낮춘다.
 
-3. **자격증명을 매니페스트에 넣지 않는다.** `api.lazypaca.com/mcp` 는 무인증 공개
-   read-only 라 애초에 넣을 토큰이 없다 — 이게 이 플러그인의 안전성 근거다. 인증이 필요한
-   서버가 생기면 값이 아니라 `${ENV_VAR}`·`bearer_token_env_var`·OAuth 로만 붙인다.
-   이 레포는 `.env` 를 갖지 않는다.
+3. **자격증명을 매니페스트에 넣지 않는다.** 공개 검색 도구는 무인증이고 예약 도구는 서버의
+   Google OAuth를 사용한다. 토큰·키를 매니페스트나 스킬에 넣지 않는다. 인증 방식이 바뀌어도
+   값이 아니라 OAuth나 표준 비밀 참조만 사용한다. 이 레포는 `.env`를 갖지 않는다.
 
 4. **내부 엔드포인트를 싣지 않는다.** `admin.lazypaca.com` 계열(Workspace OAuth 게이트)은
    공개 마켓플레이스에 올리지 않는다. 인증이 막아주더라도 내부 표면을 광고할 이유가 없다.
@@ -103,10 +103,11 @@ curl -s -o /dev/null -w '%{http_code}\n' -X POST https://api.lazypaca.com/mcp \
 5. **`https` + 우리가 소유한 도메인만.** `http://`·IP·터널 URL(ngrok 등)은 커밋하지 않는다.
    로컬 디버깅은 개인 설정(`claude mcp add`·`codex mcp add`)으로 하고 레포에 남기지 않는다.
 
-6. **쓰기 도구가 붙으면 이 문서부터 고친다.** 지금 계약은 "read-only 라서 사용자가 잃을 게
-   없다" 이고, 이건 서버가 지키는 성질이지 플러그인이 지키는 성질이 아니다. `apps/api` 에
-   변경 도구가 생기는 순간 이 플러그인의 위험 등급이 바뀐다 — 그때는 별도 플러그인으로
-   분리해서 사용자가 read-only 만 설치할 수 있게 둔다.
+6. **쓰기 도구는 실제 위험도를 숨기지 않는다.** `request_reservation`과
+   `cancel_reservation`은 외부 상태를 바꾸며 서버 metadata에서 `readOnlyHint: false`,
+   `openWorldHint: true`, `destructiveHint: true`로 선언한다. 스킬은 사용자 의사·개인정보 동의,
+   예약 요청과 확정, 취소 요청과 완료를 반드시 구분한다. 새 쓰기 도구가 생기면 이 문서와
+   스킬·공개 정책을 함께 갱신한다.
 
 7. **MCP 도구 설명·응답은 프롬프트 인젝션 표면이다.** 크롤한 음식점 리뷰·설명이 그대로
    모델 컨텍스트에 들어간다. 방어는 서버(`apps/api` 어댑터)의 책임이고 플러그인에서는
@@ -119,8 +120,10 @@ curl -s -o /dev/null -w '%{http_code}\n' -X POST https://api.lazypaca.com/mcp \
 
 - [ ] `.mcp.json` 에 `command`/`args`/`env` 가 없다 (`type`·`url` 만)
 - [ ] URL 이 `https://` + `*.lazypaca.com`
-- [ ] 토큰·키·PII 문자열 0 (`git diff | grep -iE 'token|secret|key|password'`)
+- [ ] 실제 자격증명·PII 문자열 0 (`git diff | grep -iE 'token|secret|password'`)
 - [ ] 두 매니페스트 어디에도 `hooks` 없음
+- [ ] 모든 MCP 도구의 `readOnlyHint`·`openWorldHint`·`destructiveHint`가 실제 동작과 일치
+- [ ] 공개 Privacy·Terms·Support URL이 200 응답
 - [ ] 두 CLI 로 격리 설치가 실제로 성공 (위 커맨드)
 
 ## 플러그인을 추가할 때

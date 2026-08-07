@@ -4,11 +4,11 @@
     "name": "Ongleam",
     "url": "https://github.com/ongleam"
   },
-  "description": "lazypaca — 한국 음식점 검색 MCP 를 Claude Code 에 붙이는 플러그인",
+  "description": "Lazypaca — 서울 음식점 검색과 예약 요청을 돕는 MCP 플러그인",
   "plugins": [
     {
       "name": "lazypaca",
-      "description": "한국 음식점 검색 MCP (공개 read-only). search_places · get_places · render_place_map",
+      "description": "서울 음식점 검색·상세·지도·예약 가능 시간 확인과 Google 로그인 기반 예약 요청·상태 조회·취소",
       "source": "./plugins/lazypaca"
     }
   ]

@@ -1,27 +1,35 @@
 {
   "name": "lazypaca",
-  "version": "0.1.0",
-  "description": "한국 음식점 검색 MCP. 방한 외국인 대상 — 정확하고 필터 가능한 한국어 구조화 데이터를 노출한다 (공개 read-only)",
+  "version": "0.2.0",
+  "description": "서울 음식점을 찾고 예약 가능 시간을 확인하며 예약 요청·상태 조회·취소를 안전하게 돕는 MCP 플러그인",
   "author": {
     "name": "Ongleam",
-    "url": "https://github.com/ongleam"
+    "email": "support@ongleam.com",
+    "url": "https://ongleam.com"
   },
   "homepage": "https://lazypaca.com",
   "repository": "https://github.com/ongleam/lazypaca-plugins",
   "license": "MIT",
-  "keywords": ["mcp", "korea", "restaurant", "search", "travel"],
+  "keywords": ["mcp", "korea", "seoul", "restaurant", "reservation", "travel"],
+  "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
-    "displayName": "lazypaca",
-    "shortDescription": "한국 음식점 검색 (read-only)",
-    "longDescription": "방한 외국인을 위한 한국 음식점 검색. 조건 기반 검색·배치 상세 조회·지도 렌더를 제공하며, 번역은 하지 않는다 — 클라이언트 모델이 번역기다.",
+    "displayName": "Lazypaca",
+    "shortDescription": "서울 음식점 검색과 안전한 예약 요청",
+    "longDescription": "서울의 운영 중인 음식점을 지역·음식 종류·업력으로 찾고, 상세 정보와 지도를 확인하세요. 실시간 예약 가능 시간을 확인하고 Google 계정으로 예약 요청, 상태 조회, 취소까지 안전하게 처리합니다.",
     "developerName": "Ongleam",
-    "category": "Productivity",
-    "capabilities": ["Read"],
+    "category": "Travel",
+    "capabilities": ["Read", "Write", "Interactive"],
     "websiteURL": "https://lazypaca.com",
+    "privacyPolicyURL": "https://lazypaca.com/privacy",
+    "termsOfServiceURL": "https://lazypaca.com/terms",
     "defaultPrompt": [
-      "서울 성수동에서 저녁 먹을 만한 곳 찾아줘",
-      "Find a vegetarian-friendly Korean restaurant in Jeju"
-    ]
+      "서울 을지로에서 오래된 한식당 찾아서 지도에 보여줘",
+      "이번 주말 홍대에서 예약 가능한 일식당 찾아줘",
+      "내 예약 상태를 확인하고 취소가 필요하면 도와줘"
+    ],
+    "brandColor": "#D8A35D",
+    "composerIcon": "./skills/lazypaca/assets/paca-emoticon.png",
+    "logo": "./skills/lazypaca/assets/paca-emoticon.png"
   }
 }
