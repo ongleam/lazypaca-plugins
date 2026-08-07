@@ -1,0 +1,15 @@
+interface:
+  display_name: "Lazypaca"
+  short_description: "Find Seoul restaurants and manage reservations safely"
+  default_prompt: "Use $lazypaca to find a Seoul restaurant and help me request a reservation safely."
+  icon_small: "./assets/paca-emoticon.png"
+  icon_large: "./assets/paca-emoticon.png"
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "lazypaca"
+      description: "Lazypaca restaurant search and reservation MCP server"
+      transport: "streamable_http"
+      url: "https://api.lazypaca.com/mcp"
+policy:
+  allow_implicit_invocation: true

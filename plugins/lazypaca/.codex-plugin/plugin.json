@@ -1,27 +1,35 @@
 {
   "name": "lazypaca",
-  "version": "0.1.0",
-  "description": "한국 음식점 검색 MCP. 방한 외국인 대상 — 정확하고 필터 가능한 한국어 구조화 데이터를 노출한다 (공개 read-only)",
+  "version": "0.2.0",
+  "description": "Find Seoul restaurants, check availability, and safely request, track, or cancel reservations",
   "author": {
     "name": "Ongleam",
-    "url": "https://github.com/ongleam"
+    "email": "support@ongleam.com",
+    "url": "https://ongleam.com"
   },
   "homepage": "https://lazypaca.com",
   "repository": "https://github.com/ongleam/lazypaca-plugins",
   "license": "MIT",
-  "keywords": ["mcp", "korea", "restaurant", "search", "travel"],
+  "keywords": ["mcp", "korea", "seoul", "restaurant", "reservation", "travel"],
+  "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
-    "displayName": "lazypaca",
-    "shortDescription": "한국 음식점 검색 (read-only)",
-    "longDescription": "방한 외국인을 위한 한국 음식점 검색. 조건 기반 검색·배치 상세 조회·지도 렌더를 제공하며, 번역은 하지 않는다 — 클라이언트 모델이 번역기다.",
+    "displayName": "Lazypaca",
+    "shortDescription": "Seoul restaurant search and safe reservations",
+    "longDescription": "Find operating Seoul restaurants by area, cuisine, and longevity. Compare details on a map, check live availability, and safely request, track, or cancel reservations with a Google account.",
     "developerName": "Ongleam",
-    "category": "Productivity",
-    "capabilities": ["Read"],
+    "category": "Travel",
+    "capabilities": ["Read", "Write", "Interactive"],
     "websiteURL": "https://lazypaca.com",
+    "privacyPolicyURL": "https://lazypaca.com/privacy",
+    "termsOfServiceURL": "https://lazypaca.com/terms",
     "defaultPrompt": [
-      "서울 성수동에서 저녁 먹을 만한 곳 찾아줘",
-      "Find a vegetarian-friendly Korean restaurant in Jeju"
-    ]
+      "Find long-running Korean restaurants near Euljiro and show them on a map",
+      "Find Japanese restaurants in Hongdae with availability this weekend",
+      "Check my reservation status and help me cancel if needed"
+    ],
+    "brandColor": "#D8A35D",
+    "composerIcon": "./skills/lazypaca/assets/paca-emoticon.png",
+    "logo": "./skills/lazypaca/assets/paca-emoticon.png"
   }
 }

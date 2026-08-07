@@ -2,10 +2,9 @@
 
 <img src="./assets/banner.jpg" alt="Too lazy to go out, but still ready to hunt for the perfect food spot" width="420">
 
-한국 음식점 검색 MCP 를 에이전트에 한 번에 붙이는 플러그인. Claude Code · Codex 두 형식으로
-배포한다.
+Connect Lazypaca restaurant discovery and reservation tools to Claude Code or Codex with one plugin.
 
-## 설치
+## Install
 
 **Claude Code**
 
@@ -21,26 +20,37 @@ codex plugin marketplace add ongleam/lazypaca-plugins
 codex plugin add lazypaca@lazypaca
 ```
 
-설치하면 MCP 서버가 자동 등록된다 — 별도 `mcp add` 가 필요 없다.
+Installation registers the MCP server automatically; no separate `mcp add` command is required.
 
-| 도구               | 하는 일                   |
-| ------------------ | ------------------------- |
-| `search_places`    | 조건 기반 음식점 검색     |
-| `get_places`       | id 배치 상세 조회         |
-| `render_place_map` | 결과를 지도 위젯으로 렌더 |
+| Tool                             | Purpose                                             |
+| -------------------------------- | --------------------------------------------------- |
+| `search_places`                  | Search by area, cuisine, and opening date           |
+| `get_places_details`             | Fetch details for several restaurants               |
+| `render_place_map`               | Display search results in a map widget              |
+| `check_reservation_availability` | Check live reservation times                        |
+| `render_reservation_form`        | Show a Google sign-in reservation form              |
+| `request_reservation`            | Request a reservation when a host cannot show forms |
+| `find_reservations`              | Find active reservations for the connected account  |
+| `get_reservation_status`         | Check a user-provided reservation number            |
+| `cancel_reservation`             | Cancel a reservation or submit a cancellation request |
 
-무인증 공개 read-only 다. 자격증명·토큰을 요구하지 않고, 쓰기 도구가 없고, 로컬에서 실행되는
-프로세스가 없다 (원격 HTTP MCP).
+Search, details, maps, and availability checks do not require sign-in. Reservation requests,
+status checks, and cancellations use Google OAuth. Requests and cancellations change external
+state. The plugin connects only to a remote HTTPS MCP server and stores no credentials in its
+manifests.
 
-## 플러그인 없이 붙일 때
+See the [Privacy Policy](https://lazypaca.com/privacy), [Terms of Service](https://lazypaca.com/terms),
+and [Support](https://lazypaca.com/support).
+
+## Connect without the plugin
 
 ```
 claude mcp add --transport http lazypaca https://api.lazypaca.com/mcp
 codex mcp add lazypaca --url https://api.lazypaca.com/mcp
 ```
 
-ChatGPT 는 커넥터로 같은 URL 을 추가한다.
+For ChatGPT, add the same URL as a connector.
 
-## 개발
+## Development
 
-형식 차이·검증 방법·보안 규칙은 [CLAUDE.md](./CLAUDE.md) 에 있다.
+See [CLAUDE.md](./CLAUDE.md) for platform differences, validation commands, and security rules.

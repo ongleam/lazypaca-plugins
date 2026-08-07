@@ -1,13 +1,14 @@
 {
   "name": "lazypaca",
-  "version": "0.1.0",
-  "description": "한국 음식점 검색 MCP. 방한 외국인 대상 — 정확하고 필터 가능한 한국어 구조화 데이터를 노출한다 (공개 read-only)",
+  "version": "0.2.0",
+  "description": "Find Seoul restaurants, check availability, and safely request, track, or cancel reservations",
   "author": {
     "name": "Ongleam",
-    "url": "https://github.com/ongleam"
+    "email": "support@ongleam.com",
+    "url": "https://ongleam.com"
   },
   "homepage": "https://lazypaca.com",
   "repository": "https://github.com/ongleam/lazypaca-plugins",
   "license": "MIT",
-  "keywords": ["mcp", "korea", "restaurant", "search", "travel"]
+  "keywords": ["mcp", "korea", "seoul", "restaurant", "reservation", "travel"]
 }
