@@ -91,8 +91,9 @@ that reaches user environments.
    actions use server-managed Google OAuth. This repository must not contain `.env` files.
 4. Do not expose internal endpoints such as `admin.lazypaca.com`. Internal tools belong in the
    private OnGleam marketplace.
-5. Commit only HTTPS URLs on domains owned by Lazypaca. Keep local and tunnel URLs in personal
-   development configuration.
+5. Commit MCP endpoints only as HTTPS URLs on domains owned by Lazypaca. Third-party UI resource
+   domains must be necessary, explicitly listed in the UI CSP and submission documentation, and
+   reviewed before release. Keep local and tunnel URLs in personal development configuration.
 6. Preserve the true risk of write tools. `request_reservation` and `cancel_reservation` change
    external state and must retain accurate MCP annotations. The skill must distinguish requests
    from confirmations and pending cancellations from completed cancellations.
@@ -104,7 +105,8 @@ that reaches user environments.
 ### Pre-commit checklist
 
 - [ ] `.mcp.json` contains only `type` and `url`, with no `command`, `args`, or `env`.
-- [ ] Every endpoint uses HTTPS on a Lazypaca-owned domain.
+- [ ] Every MCP endpoint uses HTTPS on a Lazypaca-owned domain; every third-party UI resource domain
+      is explicitly approved in the UI CSP and submission documentation.
 - [ ] The diff contains no real credentials or personal data.
 - [ ] Neither manifest declares hooks.
 - [ ] MCP read-only, open-world, and destructive annotations match actual behavior.
