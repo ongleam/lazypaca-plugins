@@ -11,6 +11,16 @@ Lazypaca MCP server and its usage skill.
 The server implementation is not in this repository. `ongleam/lazypaca` serves it from
 `https://api.lazypaca.com/mcp`; this repository is a distribution pointer to that endpoint.
 
+## Language policy
+
+Keep the entire repository English-only because it is distributed to an international audience.
+This applies to documentation, manifests, skill instructions, prompts, tests, comments, and file
+names. Do not copy localized API enum values into repository files; use the MCP tool schema as the
+source of truth instead.
+
+Run `bun test` before every commit. The English-only test scans all tracked and untracked,
+non-ignored files and fails when Hangul appears in either text content or a file name.
+
 ## Repository structure
 
 ```
@@ -50,6 +60,8 @@ Verified implementation details:
 There is no build step. Validate with the real CLIs in isolated configuration directories.
 
 ```bash
+bun test
+
 for f in .claude-plugin/marketplace.json .agents/plugins/marketplace.json \
          plugins/*/.claude-plugin/plugin.json plugins/*/.codex-plugin/plugin.json plugins/*/.mcp.json; do
   bun -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" && echo "ok $f"
@@ -98,7 +110,7 @@ that reaches user environments.
 - [ ] MCP read-only, open-world, and destructive annotations match actual behavior.
 - [ ] Public privacy, terms, and support URLs return HTTP 200.
 - [ ] Isolated installation succeeds in both CLIs.
-- [ ] `rg -P '\\p{Hangul}'` returns no matches anywhere in the repository.
+- [ ] `bun test` passes, including the English-only content and file-name check.
 
 ## Adding a plugin
 
