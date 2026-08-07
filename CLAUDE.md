@@ -21,6 +21,22 @@ source of truth instead.
 Run `bun test` before every commit. The English-only test scans all tracked and untracked,
 non-ignored files and fails when Hangul appears in either text content or a file name.
 
+## Release version policy
+
+Use patch as the default release unit. If the user asks to release without explicitly naming a
+version unit, run `bun scripts/bump-version.ts`, which increments only the patch component. Use
+`--minor` or `--major` only when the user explicitly requests that unit. Never infer a minor or major
+release from a feature label, change size, or perceived compatibility impact.
+
+The version script updates both platform manifests together and refuses to proceed if their current
+versions differ:
+
+```bash
+bun scripts/bump-version.ts          # default: patch
+bun scripts/bump-version.ts --minor  # explicit request only
+bun scripts/bump-version.ts --major  # explicit request only
+```
+
 ## Repository structure
 
 ```
