@@ -1,6 +1,6 @@
 interface:
   display_name: "Lazypaca"
-  short_description: "한국 음식점 검색부터 예약 확인과 취소까지 안전하게 도와요"
+  short_description: "Find Seoul restaurants and manage reservations safely"
   default_prompt: "Use $lazypaca to find a Seoul restaurant and help me request a reservation safely."
   icon_small: "./assets/paca-emoticon.png"
   icon_large: "./assets/paca-emoticon.png"

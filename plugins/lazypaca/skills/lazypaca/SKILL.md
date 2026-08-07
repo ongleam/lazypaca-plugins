@@ -1,61 +1,61 @@
 ---
 name: lazypaca
-description: Lazypaca MCP로 서울 음식점을 검색하고, 상세 정보·지도·예약 가능 시간을 확인하며, Google 로그인 기반 예약 요청·상태 조회·취소를 안전하게 처리한다. 사용자가 한국 음식점 추천, 오래된 맛집, 지역·음식 종류별 탐색, 예약 가능한 식당, 예약 요청이나 확인·취소를 원할 때 사용한다. Use for finding Seoul restaurants and safely handling Lazypaca reservation workflows in Korean or English.
+description: Use the Lazypaca MCP to search operating Seoul restaurants, inspect details and maps, check live reservation availability, and safely handle Google OAuth reservation requests, status checks, and cancellations. Use when users ask for Korean restaurant recommendations, long-running local favorites, area or cuisine searches, reservable venues, booking requests, booking status, or cancellations.
 ---
 
 # Lazypaca
 
-사용자의 언어로 답하고 내부 도구명·필드명·식당 ID·예약 ID를 노출하지 않는다.
+Reply in the user's language. Never expose tool names, raw field names, restaurant IDs, or reservation IDs.
 
-## 음식점 찾기
+## Find restaurants
 
-1. 지역과 음식 종류를 사용자가 말한 범위에서만 해석한다.
-2. 영문 지명은 검색 전에 한국어로 바꾼다. 구 단위는 `sigungu`, 동네·거리·상권은 `query`로 보낸다.
-3. 음식 종류는 한식·고기·일식·중식·양식·아시안·해산물·카페·주점·기타 중 맞는 값만 사용한다. 오마카세 같은 세부 장르는 `query`로 보낸다.
-4. 사용자가 예약 의사를 밝혔을 때만 예약 요청 가능 식당으로 좁힌다. 요청을 받는다는 사실을 빈자리 보장으로 표현하지 않는다.
-5. 오래된 식당을 원하면 영업 시작일 기준과 오래된 순 정렬을 사용한다. “80년대부터 있던”은 `opened_before: 1990-01-01`로 검색한다. “1980년대에 문 연”처럼 연대 자체를 지정하면 1990년 이전을 검색한 뒤 반환된 영업 시작일이 1980-01-01 이상인 결과만 남긴다.
+1. Interpret only the location and cuisine constraints the user actually gave.
+2. Convert Latin-script Korean locations to Korean before searching. Put exact districts in `sigungu`; put neighborhoods, streets, and nightlife areas in `query`.
+3. Use only these exact category values: `한식`, `고기`, `일식`, `중식`, `양식`, `아시안`, `해산물`, `카페`, `주점`, `기타`. Put subgenres such as omakase in `query`.
+4. Set `reservable_only` only when the user intends to book. Never describe a venue that accepts requests as having a guaranteed table.
+5. For long-running restaurants, use opening-date criteria and oldest-first sorting. Interpret “since the 1980s” as `opened_before: 1990-01-01`. For “opened in the 1980s,” search before 1990 and keep only results whose opening date is on or after `1980-01-01`.
 
-평점·리뷰 수·가격대·주차·일반 영업시간은 제공되지 않는다. 값을 만들지 말고, 지역·종류·업력으로 대안을 제시한다. 예약 시간은 예외이므로 실시간 예약 가능 시간을 확인한다.
+Ratings, review counts, price level, parking, and general opening hours are unavailable. Never invent them; offer area, cuisine, or longevity filters instead. Live reservation times are the exception, so check availability when relevant.
 
-## 상세 정보와 지도
+## Get details and show a map
 
-- 식당 설명·주소·전화·메뉴명·이미지가 필요하면 검색 결과의 ID를 그대로 상세 조회에 전달한다.
-- 여러 후보의 위치 비교가 유용할 때만 검색 결과를 지도에 표시한다.
-- 한 식당의 전화번호처럼 지도 없이 답할 수 있는 질문에는 상세 조회만 사용한다.
+- Pass returned restaurant IDs through unchanged when fetching descriptions, addresses, phone numbers, menu names, or images.
+- Show multiple candidates on the map only when geographic comparison is useful.
+- Use details alone for a question such as one venue's phone number.
 
-## 예약 가능 시간
+## Check reservation availability
 
-- 선택된 식당이 없으면 사용자가 말한 식당명을 먼저 검색한다. 식당명이나 검색 조건도 없으면 어느 식당인지 묻고 임의로 고르지 않는다.
-- 특정 식당이 예약 요청을 받는 경우에만 빈 시간을 확인한다.
-- 인원수가 없으면 묻지 말고 기본 2명을 사용한 뒤 적용한 인원수를 알려준다.
-- 가까운 상대 날짜는 시작일을 생략해 7일 결과에서 찾고, 특정 날짜가 중요할 때만 `yyyy-MM-dd`를 지정한다.
-- `open`이며 시간이 있으면 해당 시간이 가능하다.
-- `open`이며 시간이 없으면 그날은 마감이다.
-- `closed`는 그날 예약을 받지 않는다는 뜻이다.
-- `unknown`은 확인되지 않았다는 뜻이다. 마감이나 예약 불가로 해석하지 않는다.
+- If no restaurant is selected, search for the venue name the user gave. If the user gave neither a venue nor search criteria, ask which restaurant they mean; never choose one arbitrarily.
+- Check live times only for a venue that accepts reservation requests.
+- If party size is missing, use the default of two instead of asking, then state the party size applied.
+- For near relative dates, omit the start date and inspect the returned seven-day window. Set `yyyy-MM-dd` only when a specific date matters.
+- Treat `open` with times as available at those times.
+- Treat `open` without times as fully booked for that date.
+- Treat `closed` as not accepting bookings for that date.
+- Treat `unknown` as not checked, never as full or unavailable.
 
-## 예약 요청
+## Request a reservation
 
-1. 사용자가 식당과 시간을 고른 뒤 예약 폼을 우선 연다. 폼이 열리기 전에는 로그인을 요구하지 않는다.
-2. 폼은 입력 화면일 뿐 제출이 아니다. 폼을 연 뒤 예약 요청이 접수됐다고 말하지 않는다.
-3. 호스트가 폼을 표시할 수 없을 때만 직접 요청 도구를 사용한다.
-4. 직접 요청 전 식당·날짜·시간·인원, 방문자 이름, 이름을 식당에 전달하는 동의를 확인한다. 모르는 값을 만들지 않는다.
-5. 이메일은 연결된 Google 계정에서 오므로 묻지 않는다.
-6. 성공해도 “예약 확정”이라고 말하지 않는다. “예약 요청이 접수됐고 결과는 이메일로 안내된다”고 말한다.
-7. 동일 요청이 이미 있으면 새 요청을 만들었다고 말하지 않는다.
+1. After the user selects a venue and time, open the reservation form first. Do not require sign-in before the user has chosen a time.
+2. Treat the form as an input screen, not a submission. After opening it, never say that a request was filed.
+3. Use the direct request tool only when the host clearly cannot render the form.
+4. Before a direct request, confirm venue, date, time, party size, guest name, and explicit consent to share the name with the restaurant. Never invent missing values.
+5. Never ask for an email address; it comes from the linked Google account.
+6. After a successful request, never say the booking is confirmed. Say that the request was filed and the result will arrive by email.
+7. If an identical request already exists, never claim that a new request was created.
 
-## 상태 조회와 취소
+## Check status and cancel
 
-- 사용자가 예약 상태나 취소를 물으면 연결된 Google 계정으로 활성 예약 목록부터 찾는다.
-- 예약 번호를 먼저 요구하지 않는다. 사용자가 확인 이메일의 번호를 자발적으로 제공했을 때만 단건 상태 조회에 사용한다.
-- `is_confirmed`가 참일 때만 확정이라고 말한다. 요청됨·확인 중은 미확정이다.
-- 상태를 설명할 때 사람이 읽는 상태 문구를 사용하고 원시 상태값을 말하지 않는다.
-- 취소할 예약이 여러 개면 번호를 붙여 사용자가 고르게 한다. 사용자가 하나를 고른 답을 확인으로 간주하고 재확인하지 않는다.
-- `is_cancelled`가 참일 때만 취소 완료라고 말한다. 취소 요청 상태면 “취소를 요청했고 확인 중”이라고 말한다.
+- When the user asks about status or cancellation, find active reservations through the linked Google account first.
+- Never ask for a booking number first. Use a single-reservation status lookup only when the user voluntarily provides the number from their confirmation email.
+- Say “confirmed” only when `is_confirmed` is true. Requested and in-progress reservations remain unconfirmed.
+- Explain status with the human-readable status label, never a raw status value.
+- If several reservations are active, number them and let the user choose. Treat that selection as confirmation; do not ask again.
+- Say “cancelled” only when `is_cancelled` is true. For a pending cancellation request, say that cancellation was requested and is being confirmed.
 
-## 안전 규칙
+## Safety rules
 
-- 검색·상세·지도·가능 시간·상태 조회는 읽기 작업이다.
-- 예약 요청과 취소는 외부 상태를 바꾸는 작업이다. 사용자의 명시적 의사와 필요한 동의 없이 실행하지 않는다.
-- 방문자 이름과 요청 사항은 필요한 예약에만 사용한다. 응답의 내부 식별자나 마스킹 전 개인정보를 사용자에게 노출하지 않는다.
-- 사용자가 제공하지 않은 알레르기·요청 사항·인원·이름을 추측하지 않는다.
+- Treat search, details, maps, availability, and status checks as read operations.
+- Treat reservation requests and cancellations as external state changes. Never execute them without the user's explicit intent and required consent.
+- Use the guest name and notes only for the selected reservation. Never expose internal identifiers or unmasked personal information.
+- Never infer allergies, special requests, party size, or guest name that the user did not provide, except for the documented availability-check default of two people.
