@@ -1,7 +1,7 @@
 {
   "name": "lazypaca",
   "version": "0.2.0",
-  "description": "서울 음식점을 찾고 예약 가능 시간을 확인하며 예약 요청·상태 조회·취소를 안전하게 돕는 MCP 플러그인",
+  "description": "Find Seoul restaurants, check availability, and safely request, track, or cancel reservations",
   "author": {
     "name": "Ongleam",
     "email": "support@ongleam.com",
@@ -15,8 +15,8 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Lazypaca",
-    "shortDescription": "서울 음식점 검색과 안전한 예약 요청",
-    "longDescription": "서울의 운영 중인 음식점을 지역·음식 종류·업력으로 찾고, 상세 정보와 지도를 확인하세요. 실시간 예약 가능 시간을 확인하고 Google 계정으로 예약 요청, 상태 조회, 취소까지 안전하게 처리합니다.",
+    "shortDescription": "Seoul restaurant search and safe reservations",
+    "longDescription": "Find operating Seoul restaurants by area, cuisine, and longevity. Compare details on a map, check live availability, and safely request, track, or cancel reservations with a Google account.",
     "developerName": "Ongleam",
     "category": "Travel",
     "capabilities": ["Read", "Write", "Interactive"],
@@ -24,9 +24,9 @@
     "privacyPolicyURL": "https://lazypaca.com/privacy",
     "termsOfServiceURL": "https://lazypaca.com/terms",
     "defaultPrompt": [
-      "서울 을지로에서 오래된 한식당 찾아서 지도에 보여줘",
-      "이번 주말 홍대에서 예약 가능한 일식당 찾아줘",
-      "내 예약 상태를 확인하고 취소가 필요하면 도와줘"
+      "Find long-running Korean restaurants near Euljiro and show them on a map",
+      "Find Japanese restaurants in Hongdae with availability this weekend",
+      "Check my reservation status and help me cancel if needed"
     ],
     "brandColor": "#D8A35D",
     "composerIcon": "./skills/lazypaca/assets/paca-emoticon.png",
